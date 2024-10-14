@@ -13,7 +13,7 @@ SQLPORT=3306
 USERNAME="root"
 PASSWORD="root"
 DATABASE ="soccer"
-SQLALCHEMY_DATABASE_URI= f"sqlite:///Database/{DATABASE}.db"
+
 
 
 
