@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
+from flask_cors import cross_origin
 
 from DataModels import *
 from Extensions import DATABASE as db
@@ -6,9 +7,15 @@ user_bp=Blueprint("user", __name__, url_prefix="/user")
 
 
 
-# Route for setting (creating/updating) a user
-@user_bp.route('/', methods=['POST'])
+@user_bp.route('/', methods=['POST', 'OPTIONS'])
 def set_user():
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        return response
     data = request.get_json()
     if not data or 'id' not in data:
         return jsonify({'error': 'Missing user id'}), 400
