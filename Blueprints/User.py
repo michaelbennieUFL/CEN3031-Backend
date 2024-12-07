@@ -61,3 +61,25 @@ def get_user(user_id):
     response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
     response.headers.add("Access-Control-Allow-Credentials", "true")
     return response, 200
+
+
+@user_bp.route('/players', methods=['GET', 'OPTIONS'])
+def get_all_players():
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET, OPTIONS")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        return response
+
+    # Query all players
+    players = Player.query.all()
+
+    # Convert player objects to dictionaries
+    players_data = [{'id': player.id, 'name': player.name} for player in players]
+
+    response = jsonify(players_data)
+    response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response, 200
